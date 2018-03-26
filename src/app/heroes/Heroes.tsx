@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { Hero } from '../Hero';
+import HeroDetail from '../hero-detail/HeroDetail';
 
 import './Heroes.css';
 
@@ -21,9 +22,9 @@ class Heroes extends React.Component<Props, State> {
     const listItems = this.props.heroes.map((h) =>
       (
         <li
-         className={(this.props.hero.id === h.id ? 'selected' : '')}
-         key={h.id}
-         onClick={() => this.props.onClick(h)}
+          className={(this.props.hero.id === h.id ? 'selected' : '')}
+          key={h.id}
+          onClick={() => this.props.onClick(h)}
         >
           <span className="badge">{h.id}</span> {h.name}
         </li>
@@ -35,19 +36,11 @@ class Heroes extends React.Component<Props, State> {
         <h2>My Heroes</h2>
         <ul className="heroes">{listItems}</ul>
         {this.props.hero.id > 0 &&
-          <div>
-            <h2> {this.props.hero.name.toUpperCase()} Details</h2>
-            <div><span>id: </span>{this.props.hero.id}</div>
-            <div>
-              <label><span>name: </span>
-                <input
-                  type="text"
-                  value={this.props.hero.name}
-                  onChange={(event) => this.props.onChange(event)}
-                />
-              </label>
-            </div>
-          </div>
+          <HeroDetail
+            hero={this.props.hero}
+            heroes={this.props.heroes}
+            onChange={(event) => this.props.onChange(event)}
+          />
         }
       </div>
     );

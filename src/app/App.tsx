@@ -1,9 +1,12 @@
 import * as React from 'react';
 
 import Heroes from './heroes/Heroes';
+import Messages from './messages/Messages';
 
 import { Hero } from './Hero';
 import { HEROES } from './MockHeroes';
+import { HeroService } from './HeroService';
+import { MessageService } from './MessageService';
 
 import './App.css';
 
@@ -13,9 +16,14 @@ interface Props {
 interface State {
   hero: Hero;
   heroes: Hero[];
+  messages: string[];
 }
 
 class App extends React.Component<Props, State> {
+
+  messageService: MessageService = new MessageService();
+  heroService: HeroService = new HeroService(this.messageService);
+
   constructor(props: Props) {
     super(props);
 
@@ -24,13 +32,15 @@ class App extends React.Component<Props, State> {
         id: 0,
         name: ''
       },
-      heroes: HEROES
+      heroes: HEROES,
+      messages: this.messageService.messages
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
+    this.handleHeroesChange = this.handleHeroesChange.bind(this);
+    this.handleHeroesClick = this.handleHeroesClick.bind(this);
+    this.handleMessagesClick = this.handleMessagesClick.bind(this);
   }
 
-  handleChange(event: any) {
+  handleHeroesChange(event: any) {
     this.state.heroes.forEach((hero) => {
       if (hero.id === this.state.hero.id) {
         hero.name = event.target.value;
@@ -44,8 +54,13 @@ class App extends React.Component<Props, State> {
     });
   }
 
-  handleClick(hero: Hero) {
+  handleHeroesClick(hero: Hero) {
     this.setState({ hero: hero });
+  }
+
+  handleMessagesClick() {
+    this.messageService.clear();
+    this.setState({ messages: this.messageService.messages });
   }
 
   render() {
@@ -54,11 +69,16 @@ class App extends React.Component<Props, State> {
       <h1 key="a1">{title}</h1>,
       (
         <Heroes
-          key="a2"
           hero={this.state.hero}
-          heroes={this.state.heroes}
-          onChange={(event) => this.handleChange(event)}
-          onClick={this.handleClick}
+          heroService={this.heroService}
+          onChange={(event) => this.handleHeroesChange(event)}
+          onClick={this.handleHeroesClick}
+        />
+      ),
+      (
+        <Messages
+          messages={this.state.messages}
+          onClick={this.handleMessagesClick}
         />
       )
     ]);

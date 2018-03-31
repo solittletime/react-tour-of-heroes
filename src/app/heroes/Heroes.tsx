@@ -1,25 +1,31 @@
 import * as React from 'react';
 
-import { Hero } from '../Hero';
 import HeroDetail from '../hero-detail/HeroDetail';
+
+import { Hero } from '../Hero';
+import { HeroService } from '../HeroService';
 
 import './Heroes.css';
 
 interface Props {
   hero: Hero;
-  heroes: Hero[];
+  heroService: HeroService;
   onChange: (value: {}) => void;
   onClick: (value: {}) => void;
 }
 
 interface State {
-  hero: Hero;
-  heroes: Hero[];
 }
 
 class Heroes extends React.Component<Props, State> {
+  heroes: Hero[] = this.props.heroService.getHeroes();
+
+  constructor(props: Props) {
+    super(props);
+  }
+
   render() {
-    const listItems = this.props.heroes.map((h) =>
+    const listItems = this.heroes.map((h) =>
       (
         <li
           className={(this.props.hero.id === h.id ? 'selected' : '')}
@@ -38,7 +44,6 @@ class Heroes extends React.Component<Props, State> {
         {this.props.hero.id > 0 &&
           <HeroDetail
             hero={this.props.hero}
-            heroes={this.props.heroes}
             onChange={(event) => this.props.onChange(event)}
           />
         }

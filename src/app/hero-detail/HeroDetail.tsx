@@ -6,13 +6,10 @@ import './HeroDetail.css';
 
 interface Props {
   hero: Hero;
-  heroes: Hero[];
   onChange: (value: {}) => void;
 }
 
 interface State {
-  hero: Hero;
-  heroes: Hero[];
 }
 
 class HeroDetail extends React.Component<Props, State> {

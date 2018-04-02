@@ -1,11 +1,14 @@
 import * as React from 'react';
 
 import { Hero } from '../Hero';
+import { HeroService } from '../HeroService';
 
 import './HeroDetail.css';
 
 interface Props {
+  routeProps: any;
   hero: Hero;
+  heroService: HeroService;
   onChange: (value: {}) => void;
 }
 
@@ -13,6 +16,12 @@ interface State {
 }
 
 class HeroDetail extends React.Component<Props, State> {
+  heroes: any = this.props.heroService.getHero(this.props.hero.id);
+
+  constructor(props: Props) {
+    super(props);
+  }
+
   render() {
     return (
       <div>
@@ -27,6 +36,7 @@ class HeroDetail extends React.Component<Props, State> {
             />
           </label>
         </div>
+        <button onClick={() => this.props.routeProps.history.goBack()}>go back</button>
       </div>
     );
   }

@@ -1,5 +1,8 @@
 import * as React from 'react';
+import { Link, Redirect, Route, Switch } from 'react-router-dom';
 
+import Dashboard from './dashboard/Dashboard';
+import HeroDetail from './hero-detail/HeroDetail';
 import Heroes from './heroes/Heroes';
 import Messages from './messages/Messages';
 
@@ -65,18 +68,53 @@ class App extends React.Component<Props, State> {
 
   render() {
     const title = 'Tour of Heroes';
+
     return ([
       <h1 key="a1">{title}</h1>,
       (
-        <Heroes
-          hero={this.state.hero}
-          heroService={this.heroService}
-          onChange={(event) => this.handleHeroesChange(event)}
-          onClick={this.handleHeroesClick}
-        />
+        <nav key="a2">
+          <Link to="/dashboard" replace={true}>Dashboard</Link>
+          <Link to="/heroes" replace={true}>Heroes</Link>
+        </nav>
+      ),
+      (
+        <Switch key="a3">
+          <Route
+            path="/dashboard"
+            render={(routeProps) =>
+              <Dashboard
+                {...routeProps}
+                hero={this.state.hero}
+                heroService={this.heroService}
+                onClick={this.handleHeroesClick}
+              />}
+          />
+          <Route
+            path="/heroes"
+            render={(routeProps) =>
+              <Heroes
+                {...routeProps}
+                hero={this.state.hero}
+                heroService={this.heroService}
+                onClick={this.handleHeroesClick}
+              />}
+          />
+          <Route
+            path="/detail/:id"
+            render={(routeProps) =>
+              <HeroDetail
+                routeProps={routeProps}
+                hero={this.state.hero}
+                heroService={this.heroService}
+                onChange={(event) => this.handleHeroesChange(event)}
+              />}
+          />
+          <Redirect from="/" to="/dashboard" />
+        </Switch>
       ),
       (
         <Messages
+          key="a4"
           messages={this.state.messages}
           onClick={this.handleMessagesClick}
         />
